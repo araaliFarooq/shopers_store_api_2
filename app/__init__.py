@@ -1,7 +1,9 @@
 from flask import Flask
-import os
+from flask_cors import CORS
 
 app = Flask(__name__)
+# Add cors for cross origin resource sharing
+CORS(app)
 
 from app.views.authentication import auth_blueprint
 from app.views.views import views_blueprint

@@ -161,7 +161,7 @@ class CreateSalesRecord(MethodView):
                 invalid_quantity = validate.validate_input_type(quantity)
                 if invalid_quantity:
                     return jsonify({"message": invalid_quantity}), 400
-                if quantity < 0:
+                if quantity < 1:
                     return jsonify({"message": "quantity should be at least 1"}), 400    
                 invalid_id = validate.validate_input_type(product_id)
                 if invalid_id:

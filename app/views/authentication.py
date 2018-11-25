@@ -61,13 +61,14 @@ class Login(MethodView):
                 grant_access = user_controller.user_login(user_name=user_name, password=password)
                 if grant_access:
                     access_token = create_access_token(identity= grant_access["username"], expires_delta=expires)
-                    user_token["logged in user"]=user_name
+                    user_token["logged_in_user"]=grant_access["username"]
+                    user_token["role"]= grant_access["role"]
                     user_token["token"] = access_token
                     return jsonify(user_token), 200
                 return jsonify({"message": "wrong login credentials or user does not exist"}), 400
             return jsonify({"message": "a 'key(s)' is missing in login body"}), 400
-        except:
-            return jsonify({"message": "error in request body. check it and try again"}), 400
+        except Exception as exception:
+            return jsonify({"message": "error in request body. check it and try again", "exception": exception}), 400
 
 login_view = Login.as_view("login_view")
 auth_blueprint.add_url_rule("/api/auth/login",view_func=login_view, methods=["POST"])
