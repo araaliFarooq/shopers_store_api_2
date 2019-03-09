@@ -6,6 +6,7 @@ from app.controllers.user_controller import UserController
 from app.decorator import admin_permission_required
 import datetime
 
+
 validate = Validation()
 user_controller = UserController()
 auth_blueprint = Blueprint("auth_blueprint", __name__)
@@ -37,7 +38,8 @@ class RegisterAttendant(MethodView):
                 else:
                     return jsonify({"message": "Account not created"}), 400
             return jsonify({"message": "a 'key(s)' is missing in your registration body"}), 400
-        except:
+        except Exception as exception:
+            print(exception)
             return jsonify({"message": "error in request body. check it and try again"}), 400
 
 registration_view = RegisterAttendant.as_view("registration_view")
@@ -68,7 +70,8 @@ class Login(MethodView):
                 return jsonify({"message": "wrong login credentials or user does not exist"}), 400
             return jsonify({"message": "a 'key(s)' is missing in login body"}), 400
         except Exception as exception:
-            return jsonify({"message": "error in request body. check it and try again", "exception": exception}), 400
+            print(exception)
+            return jsonify({"message": "error in request body. check it and try again"}), 400
 
 login_view = Login.as_view("login_view")
 auth_blueprint.add_url_rule("/api/auth/login",view_func=login_view, methods=["POST"])

@@ -10,6 +10,12 @@ class DBFunctions:
         query = (
             """INSERT INTO users (username, contact, role, password) VALUES ('{}', '{}', '{}', '{}')""".format(user_name, contact, role, password))
         self.cursor.execute(query)
+    
+    def get_all_attendants(self):
+        #function to get all added users
+        self.cursor.execute("SELECT * from users")
+        all_users = self.cursor.fetchall()
+        return all_users    
 
     def is_username_exist(self,user_name):
         # check if username exists.

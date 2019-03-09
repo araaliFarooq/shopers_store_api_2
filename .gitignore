@@ -1,4 +1,5 @@
 env/
+env-files/
 .vscode/
 app/*.pyc
 app/auth/*.pyc

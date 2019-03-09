@@ -32,7 +32,17 @@ class Validation:
         if not re.match(r"^([a-zA-Z\d]+[-_])*[a-zA-Z\d*]+$", user_name):
             return "username must have no white spaces"
         if (role != "admin" and role != "attendant"):
-            return "role should either be admin or attendant"       
+            return "role should either be admin or attendant"
+
+    def user_username_validation(self, user_name):
+        if isinstance(user_name, int):
+            return "username shouldn't be only in numbers"
+        if not user_name:
+            return "usename is missing"
+        if user_name == " ":
+            return "username is missing"
+        if not re.match(r"^([a-zA-Z\d]+[-_])*[a-zA-Z\d*]+$", user_name):
+            return "username must have no white spaces"           
     
     def product_validation(self, product_name, quantity, unit_price):
         if not product_name:

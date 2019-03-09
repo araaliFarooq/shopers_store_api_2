@@ -211,16 +211,49 @@ class FetchSingleSaleRecord(MethodView):
             return jsonify({"message": "sale record not added yet"}), 404
         except:
             return jsonify({"message": "check url parameters and try again"}), 400
+
+class ShowAllAttendants(MethodView):
+    @jwt_required
+    def get(self):
+        all_users = user_controller.get_all_users()
+        if all_users:
+            return jsonify({"all_users":all_users}), 200
+        return jsonify({"message":"no users available"}), 404
+
+class ShowSingleAttendant(MethodView):
+    @jwt_required
+    def get(self, user_id):
+        try:
+            invalid = validate.validate_input_type(input=user_id)
+            if invalid:
+                return jsonify({"message": invalid}), 400
+            logged_user = get_jwt_identity()
+            user_role = user_controller.get_user_role(user_name=logged_user)
+            if user_role["role"] == 'admin':    
+                user_details = user_controller.get_user_role(user_name=user_name)
+            elif user_role["role"] == 'attendant':
+                user_details = user_controller.get_user_role(user_name=logged_user)
+            if user_details:
+                return jsonify({"user_details": user_details}), 200
+            return jsonify({"message": "user not registered yet"}), 404
+        except Exception as exp:
+            print(exp)
+            return jsonify({"message": "check url parameters and try again"}), 400
+
         
 
 
 make_sales_view = CreateSalesRecord.as_view("make_sales_view")
 all_sales_view = FetchAllSales.as_view("all_sales_view")
 single_sales_view = FetchSingleSaleRecord.as_view("single_sales_view")
+all_attendants_view = ShowAllAttendants.as_view("all_attendants_view")
+single_user = ShowSingleAttendant.as_view("single_user")
 
 
 views_blueprint.add_url_rule("/api/v2/sales", view_func=make_sales_view, methods=["POST"])
 views_blueprint.add_url_rule("/api/v2/sales", view_func=all_sales_view, methods=["GET"])
 views_blueprint.add_url_rule("/api/v2/sales/<sale_id>", view_func=single_sales_view, methods=["GET"])
+views_blueprint.add_url_rule("/api/v2/users", view_func=all_attendants_view, methods=["GET"])
+views_blueprint.add_url_rule("/api/v2/users/<user_name>", view_func=single_user, methods=["GET"])
 
 

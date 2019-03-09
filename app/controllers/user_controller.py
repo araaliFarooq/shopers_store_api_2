@@ -44,3 +44,8 @@ class UserController:
         # update current user's role
         user_update= self.dbcon.update_user(username=user_name, role=role)
         return user_update  
+
+    def get_all_users(self):
+        # get all registered users.
+        users = self.dbcon.get_all_attendants()
+        return users
